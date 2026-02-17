@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VTuberプロフィール</title>
+<link href="https://fonts.googleapis.com/css2?family=Kaisei+Decol:wght@400;700&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --yellow: #FFE34E;
+    --orange: #FF6B35;
+    --blue: #2D6BE4;
+    --lightblue: #A8D8FF;
+    --pink: #FF9ECD;
+    --green: #3DDC84;
+    --white: #FFFDF5;
+    --dark: #1A1A2E;
+    --cream: #FFF8E7;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--cream);
+    font-family: 'Zen Maru Gothic', sans-serif;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Polka dot background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, #FFE34E44 2px, transparent 2px);
+    background-size: 28px 28px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 20px 60px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== HEADER ===== */
+  .header-card {
+    background: var(--dark);
+    border-radius: 24px;
+    border: 4px solid var(--dark);
+    box-shadow: 8px 8px 0px var(--orange);
+    padding: 32px 28px 28px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 24px;
+    animation: floatIn 0.7s cubic-bezier(.34,1.56,.64,1) both;
+  }
+
+  .header-card::before {
+    content: '✦ ✦ ✦';
+    position: absolute;
+    top: 12px; right: 20px;
+    color: var(--yellow);
+    font-size: 12px;
+    letter-spacing: 6px;
+    opacity: 0.6;
+  }
+
+  .badge-world {
+    display: inline-block;
+    background: var(--orange);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 999px;
+    border: 2px solid var(--white);
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  .char-name {
+    font-family: 'Kaisei Decol', serif;
+    font-size: 52px;
+    color: var(--yellow);
+    line-height: 1.1;
+    text-shadow: 4px 4px 0px var(--orange);
+    letter-spacing: -1px;
+  }
+
+  .char-name-sub {
+    font-size: 16px;
+    color: #aaa;
+    margin-top: 4px;
+    letter-spacing: 4px;
+    font-weight: 400;
+  }
+
+  .name-lore {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+    margin-bottom: 4px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 12px;
+    padding: 10px 14px;
+    border: 1.5px dashed rgba(255,255,255,0.2);
+    font-size: 14px;
+    color: var(--white);
+    font-weight: 700;
+  }
+
+  .name-tag {
+    background: #444466;
+    color: #aaa;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .name-tag.earth {
+    background: var(--orange);
+    color: var(--white);
+  }
+
+  .name-arrow {
+    color: var(--yellow);
+    font-size: 18px;
+    margin: 0 2px;
+  }
+
+  .catch-phrase {
+    margin-top: 18px;
+    background: var(--yellow);
+    color: var(--dark);
+    border-radius: 12px;
+    border: 3px solid var(--dark);
+    padding: 12px 18px;
+    font-size: 17px;
+    font-weight: 700;
+    display: inline-block;
+    position: relative;
+    box-shadow: 4px 4px 0 var(--dark);
+    transform: rotate(-1deg);
+    line-height: 1.5;
+  }
+
+  .catch-phrase::before {
+    content: '📢';
+    margin-right: 8px;
+    font-size: 18px;
+  }
+
+  /* ===== LORE CARD ===== */
+  .lore-card {
+    background: var(--white);
+    border-radius: 20px;
+    border: 3px solid var(--dark);
+    box-shadow: 6px 6px 0 var(--blue);
+    padding: 24px 24px 20px;
+    margin-bottom: 20px;
+    animation: floatIn 0.7s 0.1s cubic-bezier(.34,1.56,.64,1) both;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    color: var(--blue);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: repeating-linear-gradient(90deg, var(--blue) 0, var(--blue) 6px, transparent 6px, transparent 12px);
+    opacity: 0.3;
+  }
+
+  .lore-text {
+    font-size: 15px;
+    color: #333;
+    line-height: 1.85;
+  }
+
+  .lore-text .highlight {
+    background: var(--yellow);
+    padding: 0 4px;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+
+  .lore-text .kansai {
+    color: var(--orange);
+    font-weight: 700;
+  }
+
+  /* ===== GENRE CARD ===== */
+  .genre-card {
+    background: var(--dark);
+    border-radius: 20px;
+    border: 3px solid var(--dark);
+    box-shadow: 6px 6px 0 var(--green);
+    padding: 24px;
+    margin-bottom: 20px;
+    animation: floatIn 0.7s 0.2s cubic-bezier(.34,1.56,.64,1) both;
+  }
+
+  .genre-card .section-label {
+    color: var(--green);
+  }
+
+  .genre-card .section-label::after {
+    background: repeating-linear-gradient(90deg, var(--green) 0, var(--green) 6px, transparent 6px, transparent 12px);
+    opacity: 0.3;
+  }
+
+  .genre-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .genre-item {
+    background: #2a2a45;
+    border-radius: 12px;
+    border: 2px solid #444;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.2s, border-color 0.2s;
+    cursor: default;
+  }
+
+  .genre-item:hover {
+    transform: translateY(-3px) rotate(-1deg);
+    border-color: var(--yellow);
+  }
+
+  .genre-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .genre-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.3;
+  }
+
+  .genre-desc {
+    font-size: 11px;
+    color: #888;
+    line-height: 1.4;
+  }
+
+  /* ===== LIKES/DISLIKES ===== */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .likes-card, .dislikes-card {
+    border-radius: 20px;
+    border: 3px solid var(--dark);
+    padding: 20px;
+    animation: floatIn 0.7s 0.3s cubic-bezier(.34,1.56,.64,1) both;
+  }
+
+  .likes-card {
+    background: #E8F9F0;
+    box-shadow: 5px 5px 0 var(--green);
+  }
+
+  .dislikes-card {
+    background: #FFF0F0;
+    box-shadow: 5px 5px 0 #FF4444;
+  }
+
+  .ld-label {
+    font-size: 13px;
+    font-weight: 900;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .likes-card .ld-label { color: #2a9d5c; }
+  .dislikes-card .ld-label { color: #e03030; }
+
+  .ld-item {
+    font-size: 13px;
+    color: #444;
+    padding: 5px 0;
+    border-bottom: 1px dashed #ddd;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1.4;
+  }
+
+  .ld-item:last-child { border-bottom: none; }
+
+  /* ===== FAN MESSAGE ===== */
+  .message-card {
+    background: var(--orange);
+    border-radius: 20px;
+    border: 3px solid var(--dark);
+    box-shadow: 6px 6px 0 var(--dark);
+    padding: 26px 24px;
+    position: relative;
+    overflow: hidden;
+    animation: floatIn 0.7s 0.4s cubic-bezier(.34,1.56,.64,1) both;
+  }
+
+  .message-card::after {
+    content: '💬';
+    position: absolute;
+    right: 20px;
+    bottom: 16px;
+    font-size: 48px;
+    opacity: 0.15;
+    transform: rotate(10deg);
+  }
+
+  .message-card .section-label {
+    color: var(--white);
+  }
+
+  .message-card .section-label::after {
+    background: repeating-linear-gradient(90deg, rgba(255,255,255,0.5) 0, rgba(255,255,255,0.5) 6px, transparent 6px, transparent 12px);
+  }
+
+  .fan-message {
+    font-size: 16px;
+    color: var(--white);
+    font-weight: 700;
+    line-height: 1.9;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.1);
+  }
+
+  .fan-message .em {
+    background: var(--yellow);
+    color: var(--dark);
+    padding: 1px 6px;
+    border-radius: 6px;
+    font-size: 15px;
+  }
+
+  /* ===== STATS STRIP ===== */
+  .stats-strip {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .stat-chip {
+    background: var(--lightblue);
+    border: 2.5px solid var(--dark);
+    border-radius: 999px;
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--dark);
+    box-shadow: 3px 3px 0 var(--dark);
+    white-space: nowrap;
+    animation: floatIn 0.5s calc(0.05s * var(--i)) cubic-bezier(.34,1.56,.64,1) both;
+  }
+
+  /* ===== FAN INFO ===== */
+  .fan-info-card {
+    background: var(--white);
+    border-radius: 20px;
+    border: 3px solid var(--dark);
+    box-shadow: 6px 6px 0 var(--pink);
+    padding: 24px;
+    margin-bottom: 20px;
+    animation: floatIn 0.7s 0.45s cubic-bezier(.34,1.56,.64,1) both;
+  }
+
+  .fan-info-card .section-label { color: #cc44aa; }
+  .fan-info-card .section-label::after {
+    background: repeating-linear-gradient(90deg, #cc44aa 0, #cc44aa 6px, transparent 6px, transparent 12px);
+    opacity: 0.3;
+  }
+
+  .fan-info-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px 16px;
+    align-items: center;
+    font-size: 14px;
+  }
+
+  .fan-info-key {
+    font-weight: 900;
+    color: #888;
+    font-size: 11px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+
+  .fan-info-val {
+    color: var(--dark);
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  .fan-info-val .tag {
+    display: inline-block;
+    background: #f0e8ff;
+    color: #7733bb;
+    border: 1.5px solid #c8a0f0;
+    border-radius: 6px;
+    padding: 1px 8px;
+    font-size: 12px;
+    margin-right: 4px;
+    margin-bottom: 2px;
+  }
+
+  /* ===== SNS LINKS ===== */
+  .sns-card {
+    background: var(--dark);
+    border-radius: 20px;
+    border: 3px solid var(--dark);
+    box-shadow: 6px 6px 0 var(--lightblue);
+    padding: 24px;
+    margin-bottom: 20px;
+    animation: floatIn 0.7s 0.5s cubic-bezier(.34,1.56,.64,1) both;
+  }
+
+  .sns-card .section-label { color: var(--lightblue); }
+  .sns-card .section-label::after {
+    background: repeating-linear-gradient(90deg, var(--lightblue) 0, var(--lightblue) 6px, transparent 6px, transparent 12px);
+    opacity: 0.3;
+  }
+
+  .sns-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .sns-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #2a2a45;
+    border: 2px solid #555;
+    border-radius: 12px;
+    padding: 10px 18px;
+    color: var(--white);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.2s, border-color 0.2s, background 0.2s;
+    cursor: pointer;
+  }
+
+  .sns-btn:hover {
+    transform: translateY(-3px);
+    border-color: var(--yellow);
+    background: #363660;
+  }
+
+  .sns-btn-icon { font-size: 18px; }
+
+  /* ===== NOTICE ===== */
+  .notice-card {
+    background: #FFFBF0;
+    border-radius: 20px;
+    border: 3px solid var(--dark);
+    box-shadow: 6px 6px 0 var(--yellow);
+    padding: 24px;
+    margin-bottom: 20px;
+    animation: floatIn 0.7s 0.55s cubic-bezier(.34,1.56,.64,1) both;
+  }
+
+  .notice-card .section-label { color: #bb8800; }
+  .notice-card .section-label::after {
+    background: repeating-linear-gradient(90deg, #bb8800 0, #bb8800 6px, transparent 6px, transparent 12px);
+    opacity: 0.3;
+  }
+
+  .notice-sub {
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: #aaa;
+    margin: 14px 0 8px;
+  }
+
+  .notice-item {
+    font-size: 13px;
+    color: #444;
+    line-height: 1.7;
+    padding: 4px 0;
+    display: flex;
+    gap: 8px;
+  }
+
+  .notice-item .ok  { color: #2a9d5c; font-weight: 900; flex-shrink: 0; }
+  .notice-item .ng  { color: #e03030; font-weight: 900; flex-shrink: 0; }
+  .notice-item .num { color: #888;    font-weight: 900; flex-shrink: 0; }
+
+  /* ===== CREDITS ===== */
+  .credits-card {
+    background: var(--white);
+    border-radius: 20px;
+    border: 3px solid var(--dark);
+    box-shadow: 6px 6px 0 #aaa;
+    padding: 24px;
+    margin-bottom: 20px;
+    animation: floatIn 0.7s 0.6s cubic-bezier(.34,1.56,.64,1) both;
+  }
+
+  .credits-card .section-label { color: #666; }
+  .credits-card .section-label::after {
+    background: repeating-linear-gradient(90deg, #aaa 0, #aaa 6px, transparent 6px, transparent 12px);
+    opacity: 0.3;
+  }
+
+  .credit-item {
+    font-size: 13px;
+    color: #555;
+    padding: 5px 0;
+    border-bottom: 1px dashed #eee;
+    display: flex;
+    gap: 12px;
+  }
+
+  .credit-item:last-child { border-bottom: none; }
+  .credit-role { color: #aaa; font-size: 11px; font-weight: 700; letter-spacing: 1px; min-width: 110px; flex-shrink: 0; }
+  .credit-name { font-weight: 700; color: #333; }
+
+  /* ===== FOOTER TAG ===== */
+  .footer-tag {
+    text-align: center;
+    margin-top: 32px;
+    font-size: 12px;
+    color: #bbb;
+    letter-spacing: 2px;
+  }
+
+  /* ===== DECORATIONS ===== */
+  .deco-star {
+    position: absolute;
+    font-size: 28px;
+    animation: spin 8s linear infinite;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  .deco-star:nth-child(1) { top: -14px; right: 40px; animation-direction: reverse; }
+  .deco-star:nth-child(2) { bottom: -12px; left: 30px; font-size: 20px; animation-duration: 6s; }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes floatIn {
+    from { opacity: 0; transform: translateY(24px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+  }
+
+  /* responsive */
+  @media (max-width: 500px) {
+    .char-name { font-size: 38px; }
+    .two-col { grid-template-columns: 1fr; }
+    .genre-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header-card">
+    <div class="deco-star">⭐</div>
+    <div class="deco-star">✨</div>
+    <div class="badge-world">🌍 異世界からの使者 / Otherworld Exchange Student</div>
+    <div class="char-name">碧樹<br><span style="font-size:40px;">シクロ</span></div>
+    <div class="char-name-sub">CICLO AOKI</div>
+    <div class="name-lore">
+      <span class="name-tag">異世界での名前</span>シクロ
+      <span class="name-arrow">→</span>
+      <span class="name-tag earth">地球でつけた名前</span>碧樹シクロ
+    </div>
+    <div class="catch-phrase">「この世界、知らないことだらけで楽しすぎる！」</div>
+  </div>
+
+  <!-- STATS CHIPS -->
+  <div class="stats-strip">
+    <div class="stat-chip" style="--i:1">🏠 出身：異世界</div>
+    <div class="stat-chip" style="--i:2">🗣️ 関西弁</div>
+    <div class="stat-chip" style="--i:3">🎩 執事見習い中</div>
+    <div class="stat-chip" style="--i:4">🔮 魔法は使えない</div>
+    <div class="stat-chip" style="--i:5">💇 髪色は変えられる</div>
+  </div>
+
+  <!-- LORE -->
+  <div class="lore-card">
+    <div class="section-label">📖 プロフィール</div>
+    <div class="lore-text">
+      お坊ちゃまの<span class="highlight">異世界留学</span>に付き添って地球にやってきた青年。
+      異世界では<span class="highlight">「シクロ」</span>の名前だけで生きてきたけど、
+      地球に来てから<span class="highlight">「碧樹（あおき）」</span>という苗字がついた。
+      <span class="kansai">「なんか地球っぽくていいな」</span>って気に入ってるらしい。<br><br>
+      最初に降り立ったのが<span class="highlight">関西</span>だったので、
+      周りの人の話し方を参考にしているうちに、気づいたら関西弁になってた。<br><br>
+      将来はお坊ちゃまの<span class="highlight">執事</span>になる予定だけど、今はまだ見習い兼・友人ポジション。
+      故郷に向けて地球の文明を発信するのがお仕事で、
+      特に<span class="highlight">IT・グルメ</span>にすごく興味あり。
+      魔法は使えないけど、知識と好奇心はどの魔法使いにも負けないつもり！
+    </div>
+  </div>
+
+  <!-- GENRES -->
+  <div class="genre-card">
+    <div class="section-label">📺 動画・配信ジャンル</div>
+    <div style="font-size:11px; color:#aaa; margin-bottom:12px;">※配信は準備中。現在は動画メインで活動中！</div>
+    <div class="genre-grid">
+      <div class="genre-item">
+        <div class="genre-icon">💻</div>
+        <div>
+          <div class="genre-name">IT・テック雑談</div>
+          <div class="genre-desc">異世界目線で語るガジェット・アプリ沼</div>
+        </div>
+      </div>
+      <div class="genre-item">
+        <div class="genre-icon">🍜</div>
+        <div>
+          <div class="genre-name">グルメ実況</div>
+          <div class="genre-desc">初見食材に全力でビビる</div>
+        </div>
+      </div>
+      <div class="genre-item">
+        <div class="genre-icon">🎮</div>
+        <div>
+          <div class="genre-name">ゲーム実況</div>
+          <div class="genre-desc">地球のゲームを異世界人が攻略する</div>
+        </div>
+      </div>
+      <div class="genre-item">
+        <div class="genre-icon">🎵</div>
+        <div>
+          <div class="genre-name">歌配信</div>
+          <div class="genre-desc">地球の名曲をシクロの声でお届け</div>
+        </div>
+      </div>
+      <div class="genre-item">
+        <div class="genre-icon">🌏</div>
+        <div>
+          <div class="genre-name">異文化交流トーク</div>
+          <div class="genre-desc">異世界との比較で世界観が広がる</div>
+        </div>
+      </div>
+      <div class="genre-item">
+        <div class="genre-icon">❓</div>
+        <div>
+          <div class="genre-name">なんでも質問コーナー</div>
+          <div class="genre-desc">執事見習いが何でも調べます</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIKES / DISLIKES -->
+  <div class="two-col">
+    <div class="likes-card">
+      <div class="ld-label">💚 好きなもの</div>
+      <div class="ld-item">🍣 関西グルメ全般</div>
+      <div class="ld-item">📱 最新テクノロジー</div>
+      <div class="ld-item">🎮 RPGゲーム</div>
+      <div class="ld-item">🎵 J-POP全般</div>
+      <div class="ld-item">💬 おしゃべり・雑談</div>
+    </div>
+    <div class="dislikes-card">
+      <div class="ld-label">❤️ 苦手なもの</div>
+      <div class="ld-item">👻 ホラー系全般</div>
+      <div class="ld-item">🌶️ 激辛料理</div>
+      <div class="ld-item">📐 複雑な数学</div>
+      <div class="ld-item">🤫 静かすぎる空間</div>
+      <div class="ld-item">🗺️ 道に迷うこと</div>
+    </div>
+  </div>
+
+  <!-- FAN MESSAGE -->
+  <div class="message-card">
+    <div class="section-label">💌 みんなへひとこと</div>
+    <div class="fan-message">
+      ここ見てくれてありがとう！<br>
+      地球に来たばかりで<span class="em">わからないことだらけ</span>なんだけど、<br>
+      みんなと一緒にいろいろ学んでいけたら嬉しいな。<br><br>
+      「それ異世界ではどうなの？」とか「これ食べてみて！」とか、<br>
+      なんでも気軽に話しかけてきてね。<br>
+      <span class="em">全力で答えるから</span>、よろしく！<br><br>
+      ……執事になるまでの道のり、<span class="em">一緒に見守ってもらえると嬉しいです🎩✨</span>
+    </div>
+  </div>
+
+  <!-- FAN INFO -->
+  <div class="fan-info-card">
+    <div class="section-label">🌸 ファン情報</div>
+    <div class="fan-info-grid">
+      <div class="fan-info-key">ファンネーム</div>
+      <div class="fan-info-val">アオキスタ（Aokista）</div>
+      <div class="fan-info-key">ファンマーク</div>
+      <div class="fan-info-val">🫖🎩</div>
+      <div class="fan-info-key">総合タグ</div>
+      <div class="fan-info-val"><span class="tag">#碧樹シクロ</span></div>
+      <div class="fan-info-key">配信準備中</div>
+      <div class="fan-info-val"><span class="tag">#シクロ準備中</span></div>
+      <div class="fan-info-key">配信中</div>
+      <div class="fan-info-val"><span class="tag">#シクロ出動中</span></div>
+      <div class="fan-info-key">ファンアートタグ</div>
+      <div class="fan-info-val"><span class="tag">#アオキート</span></div>
+      <div class="fan-info-key">切り抜きタグ</div>
+      <div class="fan-info-val"><span class="tag">#碧樹シクロ切り抜き</span></div>
+    </div>
+  </div>
+
+  <!-- SNS -->
+  <div class="sns-card">
+    <div class="section-label">📡 SNS・リンク一覧</div>
+    <div class="sns-grid">
+      <a class="sns-btn" href="https://www.youtube.com/@shikulo_aoki" target="_blank"><span class="sns-btn-icon">▶️</span> YouTube</a>
+      <a class="sns-btn" href="https://x.com/CicloAoki" target="_blank"><span class="sns-btn-icon">🐦</span> X (Twitter)</a>
+      <div class="sns-btn mail-btn"><span class="sns-btn-icon">💌</span><div><div style="font-size:11px;color:#aaa;font-weight:400;">お仕事のご依頼</div><div style="font-size:12px;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="077e6872752a626a666e6b47627f666a776b622964686a">[email&#160;protected]</a></div></div></div>
+    </div>
+  </div>
+
+  <!-- NOTICE -->
+  <div class="notice-card">
+    <div class="section-label">📋 リスナー注意事項</div>
+
+    <div class="notice-sub">▸ ファンアートについて</div>
+    <div class="notice-item"><span class="ok">OK</span> ファンアート大歓迎！タグをつけてくれると嬉しいです</div>
+    <div class="notice-item"><span class="ok">OK</span> 夢絵・同人誌</div>
+    <div class="notice-item"><span class="ng">NG</span> R18・グロ表現を含むもの</div>
+    <div class="notice-item"><span class="ng">NG</span> AIイラストをファンアートタグでの投稿</div>
+    <div class="notice-item"><span class="ng">NG</span> 偏った思想・発言を含むもの</div>
+
+    <div class="notice-sub">▸ 切り抜きについて</div>
+    <div class="notice-item"><span class="num">①</span> 切り抜き元のURL・YouTubeリンクを概要欄に記載してください</div>
+    <div class="notice-item"><span class="num">②</span> メンバー限定・非公開配信の切り抜き禁止</div>
+    <div class="notice-item"><span class="num">③</span> 悪意のある切り抜きはやめてください</div>
+    <div class="notice-item"><span class="num">④</span> 収益化を達成した場合はメールまでご連絡ください</div>
+
+    <div class="notice-sub">▸ その他</div>
+    <div class="notice-item"><span class="ng">NG</span> ルール違反者を見つけた場合、各サービス内での報告をお願いします</div>
+    <div class="notice-item"><span class="ng">NG</span> メールはお仕事用です。リスナーの方は送らないでください</div>
+  </div>
+
+  <!-- CREDITS -->
+  <div class="credits-card">
+    <div class="section-label">✨ Special Thanks</div>
+    <div class="credit-item">
+      <span class="credit-role">illustrator</span>
+      <span class="credit-name">（準備中）</span>
+    </div>
+    <div class="credit-item">
+      <span class="credit-role">Live2D modeling</span>
+      <span class="credit-name">（準備中）</span>
+    </div>
+    <div class="credit-item">
+      <span class="credit-role">logo / design</span>
+      <span class="credit-name">（準備中）</span>
+    </div>
