@@ -1,798 +1,1526 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>碧樹シクロプロフィール</title>
-<link href="https://fonts.googleapis.com/css2?family=Kaisei+Decol:wght@400;700&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
+<title>碧樹シクロ　見習い執事</title>
+<meta name="description" content="茶毘羅北部・第四千年紀より地球・大阪へ赴任して参りました、碧樹シクロの個人ページでございます。関西弁、IT、グルメの話題が中心であります。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kaisei+Decol:wght@400;700&family=Shippori+Mincho+B1:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --yellow: #FFE34E;
-    --orange: #FF6B35;
-    --blue: #2D6BE4;
-    --lightblue: #A8D8FF;
-    --pink: #FF9ECD;
-    --green: #3DDC84;
-    --white: #FFFDF5;
-    --dark: #1A1A2E;
-    --cream: #FFF8E7;
+    --ai:        #1f2e44;   /* 紺 ── 中間 */
+    --ai-deep:   #142036;   /* 夜紺 ── 最深 */
+    --sumi-text: #2a241d;   /* 墨 ── 本文 */
+    --kin:       #b58d4d;   /* 金 ── 主アクセント */
+    --kin-soft:  #d6b877;   /* 金柔 ── 紺地上の細線 */
+    --kin-pale:  #ebd9ad;   /* 金淡 ── 紺地上の文字 */
+    --zoge:      #f5eddc;   /* 生成り ── 余白 */
+    --washi:     #efe7d4;   /* 和紙 ── カードの地 */
+    --beni:      #b53638;   /* 朱 ── 注意・強調 */
+    --moegi:     #5d7355;   /* 萌葱 ── 肯定・好き */
+    --sub:       #786a55;   /* 説明墨 ── キャプション */
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .bell-rung .bell-shake { animation: bellWiggle 2.2s ease-in-out; }
+    .callout { animation: fadeIn .6s ease both; }
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
+  html { scroll-behavior: smooth; }
   body {
-    background-color: var(--cream);
-    font-family: 'Zen Maru Gothic', sans-serif;
+    background: var(--zoge);
+    font-family: 'Shippori Mincho B1', 'Yu Mincho', serif;
+    color: var(--sumi-text);
     overflow-x: hidden;
     position: relative;
+    line-height: 1.95;
+    /* カスタムカーソル：内懐の朱印風 */
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'><circle cx='11' cy='11' r='3.2' fill='%23b53638' fill-opacity='0.85'/><circle cx='11' cy='11' r='9' fill='none' stroke='%23b53638' stroke-opacity='0.55' stroke-width='1.2'/></svg>") 11 11, auto;
   }
 
-  /* Polka dot background */
+  /* ─ 和紙の地（ささやかな繊維） ─ */
   body::before {
     content: '';
-    position: fixed;
-    inset: 0;
-    background-image: radial-gradient(circle, #FFE34E44 2px, transparent 2px);
-    background-size: 28px 28px;
-    pointer-events: none;
-    z-index: 0;
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      repeating-linear-gradient( 8deg, rgba(120,90,55,0.045) 0 1px, transparent 1px 7px),
+      repeating-linear-gradient(-6deg, rgba(120,90,55,0.035) 0 1px, transparent 1px 11px);
+    mix-blend-mode: multiply;
+  }
+  body::after {
+    content: '';
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(ellipse 1200px 700px at 20% 8%, rgba(181,54,56,0.04), transparent 70%),
+      radial-gradient(ellipse 1100px 800px at 80% 92%, rgba(20,32,54,0.05), transparent 70%);
   }
 
-  .page {
-    max-width: 720px;
+  .frame {
+    max-width: 820px;
     margin: 0 auto;
-    padding: 32px 20px 60px;
+    padding: 0 22px 96px;
     position: relative;
     z-index: 1;
   }
 
-  /* ===== HEADER ===== */
-  .header-card {
-    background: var(--dark);
-    border-radius: 24px;
-    border: 4px solid var(--dark);
-    box-shadow: 8px 8px 0px var(--orange);
-    padding: 32px 28px 28px;
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 24px;
-    animation: floatIn 0.7s cubic-bezier(.34,1.56,.64,1) both;
-  }
+  /* ════ 共通型 ════ */
+  section { margin-bottom: 64px; }
+  section:last-of-type { margin-bottom: 40px; }
 
-  .header-card::before {
-    content: '✦ ✦ ✦';
-    position: absolute;
-    top: 12px; right: 20px;
-    color: var(--yellow);
-    font-size: 12px;
-    letter-spacing: 6px;
-    opacity: 0.6;
+  .sec-head {
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    align-items: end;
+    column-gap: 14px;
+    margin-bottom: 22px;
   }
-
-  .badge-world {
-    display: inline-block;
-    background: var(--orange);
-    color: var(--white);
-    font-size: 11px;
-    font-weight: 700;
-    padding: 4px 14px;
-    border-radius: 999px;
-    border: 2px solid var(--white);
-    margin-bottom: 16px;
-    letter-spacing: 1px;
-    animation: pulse 2s ease-in-out infinite;
-  }
-
-  .char-name {
+  .sec-head .num {
     font-family: 'Kaisei Decol', serif;
-    font-size: 52px;
-    color: var(--yellow);
-    line-height: 1.1;
-    text-shadow: 4px 4px 0px var(--orange);
-    letter-spacing: -1px;
+    font-size: 30px;
+    color: var(--kin);
+    line-height: 1;
   }
-
-  .char-name-sub {
-    font-size: 16px;
-    color: #aaa;
-    margin-top: 4px;
-    letter-spacing: 4px;
-    font-weight: 400;
-  }
-
-  .name-lore {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-top: 14px;
-    margin-bottom: 4px;
-    background: rgba(255,255,255,0.07);
-    border-radius: 12px;
-    padding: 10px 14px;
-    border: 1.5px dashed rgba(255,255,255,0.2);
-    font-size: 14px;
-    color: var(--white);
-    font-weight: 700;
-  }
-
-  .name-tag {
-    background: #444466;
-    color: #aaa;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    padding: 3px 10px;
-    border-radius: 999px;
-    white-space: nowrap;
-  }
-
-  .name-tag.earth {
-    background: var(--orange);
-    color: var(--white);
-  }
-
-  .name-arrow {
-    color: var(--yellow);
-    font-size: 18px;
-    margin: 0 2px;
-  }
-
-  .catch-phrase {
-    margin-top: 18px;
-    background: var(--yellow);
-    color: var(--dark);
-    border-radius: 12px;
-    border: 3px solid var(--dark);
-    padding: 12px 18px;
-    font-size: 17px;
-    font-weight: 700;
-    display: inline-block;
-    position: relative;
-    box-shadow: 4px 4px 0 var(--dark);
-    transform: rotate(-1deg);
-    line-height: 1.5;
-  }
-
-  .catch-phrase::before {
-    content: '📢';
-    margin-right: 8px;
-    font-size: 18px;
-  }
-
-  /* ===== LORE CARD ===== */
-  .lore-card {
-    background: var(--white);
-    border-radius: 20px;
-    border: 3px solid var(--dark);
-    box-shadow: 6px 6px 0 var(--blue);
-    padding: 24px 24px 20px;
-    margin-bottom: 20px;
-    animation: floatIn 0.7s 0.1s cubic-bezier(.34,1.56,.64,1) both;
-  }
-
-  .section-label {
-    font-size: 11px;
-    font-weight: 900;
-    letter-spacing: 3px;
-    color: var(--blue);
-    text-transform: uppercase;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 2px;
-    background: repeating-linear-gradient(90deg, var(--blue) 0, var(--blue) 6px, transparent 6px, transparent 12px);
-    opacity: 0.3;
-  }
-
-  .lore-text {
-    font-size: 15px;
-    color: #333;
-    line-height: 1.85;
-  }
-
-  .lore-text .highlight {
-    background: var(--yellow);
-    padding: 0 4px;
-    border-radius: 4px;
-    font-weight: 700;
-  }
-
-  .lore-text .kansai {
-    color: var(--orange);
-    font-weight: 700;
-  }
-
-  /* ===== GENRE CARD ===== */
-  .genre-card {
-    background: var(--dark);
-    border-radius: 20px;
-    border: 3px solid var(--dark);
-    box-shadow: 6px 6px 0 var(--green);
-    padding: 24px;
-    margin-bottom: 20px;
-    animation: floatIn 0.7s 0.2s cubic-bezier(.34,1.56,.64,1) both;
-  }
-
-  .genre-card .section-label {
-    color: var(--green);
-  }
-
-  .genre-card .section-label::after {
-    background: repeating-linear-gradient(90deg, var(--green) 0, var(--green) 6px, transparent 6px, transparent 12px);
-    opacity: 0.3;
-  }
-
-  .genre-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-top: 4px;
-  }
-
-  .genre-item {
-    background: #2a2a45;
-    border-radius: 12px;
-    border: 2px solid #444;
-    padding: 12px 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    transition: transform 0.2s, border-color 0.2s;
-    cursor: default;
-  }
-
-  .genre-item:hover {
-    transform: translateY(-3px) rotate(-1deg);
-    border-color: var(--yellow);
-  }
-
-  .genre-icon {
+  .sec-head h2 {
+    font-family: 'Shippori Mincho B1', serif;
     font-size: 22px;
-    flex-shrink: 0;
+    font-weight: 600;
+    color: var(--ai-deep);
+    letter-spacing: 6px;
+    line-height: 1;
+  }
+  .sec-head .rule {
+    height: 1px;
+    background: repeating-linear-gradient(90deg, var(--kin) 0 8px, transparent 8px 14px);
+    align-self: center;
+    margin-bottom: 4px;
+  }
+  .sec-head .en {
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: 10px;
+    color: var(--sub);
+    letter-spacing: 2px;
+    align-self: center;
+    margin-bottom: 4px;
   }
 
-  .genre-name {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--white);
-    line-height: 1.3;
-  }
-
-  .genre-desc {
-    font-size: 11px;
-    color: #888;
-    line-height: 1.4;
-  }
-
-  /* ===== LIKES/DISLIKES ===== */
-  .two-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 20px;
-  }
-
-  .likes-card, .dislikes-card {
-    border-radius: 20px;
-    border: 3px solid var(--dark);
-    padding: 20px;
-    animation: floatIn 0.7s 0.3s cubic-bezier(.34,1.56,.64,1) both;
-  }
-
-  .likes-card {
-    background: #E8F9F0;
-    box-shadow: 5px 5px 0 var(--green);
-  }
-
-  .dislikes-card {
-    background: #FFF0F0;
-    box-shadow: 5px 5px 0 #FF4444;
-  }
-
-  .ld-label {
-    font-size: 13px;
-    font-weight: 900;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .likes-card .ld-label { color: #2a9d5c; }
-  .dislikes-card .ld-label { color: #e03030; }
-
-  .ld-item {
-    font-size: 13px;
-    color: #444;
-    padding: 5px 0;
-    border-bottom: 1px dashed #ddd;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    line-height: 1.4;
-  }
-
-  .ld-item:last-child { border-bottom: none; }
-
-  /* ===== FAN MESSAGE ===== */
-  .message-card {
-    background: var(--orange);
-    border-radius: 20px;
-    border: 3px solid var(--dark);
-    box-shadow: 6px 6px 0 var(--dark);
-    padding: 26px 24px;
+  .paper {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.4), rgba(0,0,0,0.02)),
+      var(--washi);
+    border: 1px solid #c8b895;
+    border-radius: 2px 2px 8px 8px;
+    padding: 28px 30px;
     position: relative;
-    overflow: hidden;
-    animation: floatIn 0.7s 0.4s cubic-bezier(.34,1.56,.64,1) both;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.6) inset,
+      0 14px 32px -22px rgba(40,30,20,0.35);
   }
-
-  .message-card::after {
-    content: '💬';
+  .paper::before, .paper::after {
+    content: '';
     position: absolute;
-    right: 20px;
-    bottom: 16px;
-    font-size: 48px;
-    opacity: 0.15;
-    transform: rotate(10deg);
-  }
-
-  .message-card .section-label {
-    color: var(--white);
-  }
-
-  .message-card .section-label::after {
-    background: repeating-linear-gradient(90deg, rgba(255,255,255,0.5) 0, rgba(255,255,255,0.5) 6px, transparent 6px, transparent 12px);
-  }
-
-  .fan-message {
-    font-size: 16px;
-    color: var(--white);
-    font-weight: 700;
-    line-height: 1.9;
-    text-shadow: 1px 1px 0 rgba(0,0,0,0.1);
-  }
-
-  .fan-message .em {
-    background: var(--yellow);
-    color: var(--dark);
-    padding: 1px 6px;
-    border-radius: 6px;
-    font-size: 15px;
-  }
-
-  /* ===== STATS STRIP ===== */
-  .stats-strip {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
-
-  .stat-chip {
-    background: var(--lightblue);
-    border: 2.5px solid var(--dark);
-    border-radius: 999px;
-    padding: 6px 16px;
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--dark);
-    box-shadow: 3px 3px 0 var(--dark);
-    white-space: nowrap;
-    animation: floatIn 0.5s calc(0.05s * var(--i)) cubic-bezier(.34,1.56,.64,1) both;
-  }
-
-  /* ===== FAN INFO ===== */
-  .fan-info-card {
-    background: var(--white);
-    border-radius: 20px;
-    border: 3px solid var(--dark);
-    box-shadow: 6px 6px 0 var(--pink);
-    padding: 24px;
-    margin-bottom: 20px;
-    animation: floatIn 0.7s 0.45s cubic-bezier(.34,1.56,.64,1) both;
-  }
-
-  .fan-info-card .section-label { color: #cc44aa; }
-  .fan-info-card .section-label::after {
-    background: repeating-linear-gradient(90deg, #cc44aa 0, #cc44aa 6px, transparent 6px, transparent 12px);
-    opacity: 0.3;
-  }
-
-  .fan-info-grid {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 8px 16px;
-    align-items: center;
-    font-size: 14px;
-  }
-
-  .fan-info-key {
-    font-weight: 900;
-    color: #888;
-    font-size: 11px;
-    letter-spacing: 1px;
-    white-space: nowrap;
-  }
-
-  .fan-info-val {
-    color: var(--dark);
-    font-weight: 700;
-    font-size: 14px;
-  }
-
-  .fan-info-val .tag {
-    display: inline-block;
-    background: #f0e8ff;
-    color: #7733bb;
-    border: 1.5px solid #c8a0f0;
-    border-radius: 6px;
-    padding: 1px 8px;
-    font-size: 12px;
-    margin-right: 4px;
-    margin-bottom: 2px;
-  }
-
-  /* ===== SNS LINKS ===== */
-  .sns-card {
-    background: var(--dark);
-    border-radius: 20px;
-    border: 3px solid var(--dark);
-    box-shadow: 6px 6px 0 var(--lightblue);
-    padding: 24px;
-    margin-bottom: 20px;
-    animation: floatIn 0.7s 0.5s cubic-bezier(.34,1.56,.64,1) both;
-  }
-
-  .sns-card .section-label { color: var(--lightblue); }
-  .sns-card .section-label::after {
-    background: repeating-linear-gradient(90deg, var(--lightblue) 0, var(--lightblue) 6px, transparent 6px, transparent 12px);
-    opacity: 0.3;
-  }
-
-  .sns-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .sns-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: #2a2a45;
-    border: 2px solid #555;
-    border-radius: 12px;
-    padding: 10px 18px;
-    color: var(--white);
-    font-size: 13px;
-    font-weight: 700;
-    text-decoration: none;
-    transition: transform 0.2s, border-color 0.2s, background 0.2s;
-    cursor: pointer;
-  }
-
-  .sns-btn:hover {
-    transform: translateY(-3px);
-    border-color: var(--yellow);
-    background: #363660;
-  }
-
-  .sns-btn-icon { font-size: 18px; }
-
-  /* ===== NOTICE ===== */
-  .notice-card {
-    background: #FFFBF0;
-    border-radius: 20px;
-    border: 3px solid var(--dark);
-    box-shadow: 6px 6px 0 var(--yellow);
-    padding: 24px;
-    margin-bottom: 20px;
-    animation: floatIn 0.7s 0.55s cubic-bezier(.34,1.56,.64,1) both;
-  }
-
-  .notice-card .section-label { color: #bb8800; }
-  .notice-card .section-label::after {
-    background: repeating-linear-gradient(90deg, #bb8800 0, #bb8800 6px, transparent 6px, transparent 12px);
-    opacity: 0.3;
-  }
-
-  .notice-sub {
-    font-size: 12px;
-    font-weight: 900;
-    letter-spacing: 2px;
-    color: #aaa;
-    margin: 14px 0 8px;
-  }
-
-  .notice-item {
-    font-size: 13px;
-    color: #444;
-    line-height: 1.7;
-    padding: 4px 0;
-    display: flex;
-    gap: 8px;
-  }
-
-  .notice-item .ok  { color: #2a9d5c; font-weight: 900; flex-shrink: 0; }
-  .notice-item .ng  { color: #e03030; font-weight: 900; flex-shrink: 0; }
-  .notice-item .num { color: #888;    font-weight: 900; flex-shrink: 0; }
-
-  /* ===== CREDITS ===== */
-  .credits-card {
-    background: var(--white);
-    border-radius: 20px;
-    border: 3px solid var(--dark);
-    box-shadow: 6px 6px 0 #aaa;
-    padding: 24px;
-    margin-bottom: 20px;
-    animation: floatIn 0.7s 0.6s cubic-bezier(.34,1.56,.64,1) both;
-  }
-
-  .credits-card .section-label { color: #666; }
-  .credits-card .section-label::after {
-    background: repeating-linear-gradient(90deg, #aaa 0, #aaa 6px, transparent 6px, transparent 12px);
-    opacity: 0.3;
-  }
-
-  .credit-item {
-    font-size: 13px;
-    color: #555;
-    padding: 5px 0;
-    border-bottom: 1px dashed #eee;
-    display: flex;
-    gap: 12px;
-  }
-
-  .credit-item:last-child { border-bottom: none; }
-  .credit-role { color: #aaa; font-size: 11px; font-weight: 700; letter-spacing: 1px; min-width: 110px; flex-shrink: 0; }
-  .credit-name { font-weight: 700; color: #333; }
-
-  /* ===== FOOTER TAG ===== */
-  .footer-tag {
-    text-align: center;
-    margin-top: 32px;
-    font-size: 12px;
-    color: #bbb;
-    letter-spacing: 2px;
-  }
-
-  /* ===== DECORATIONS ===== */
-  .deco-star {
-    position: absolute;
-    font-size: 28px;
-    animation: spin 8s linear infinite;
-    opacity: 0.6;
+    width: 22px; height: 22px;
     pointer-events: none;
   }
+  .paper::before {
+    top: -1px; left: -1px;
+    border-top: 2px solid var(--kin);
+    border-left: 2px solid var(--kin);
+    border-top-left-radius: 6px;
+  }
+  .paper::after {
+    bottom: -1px; right: -1px;
+    border-bottom: 2px solid var(--kin);
+    border-right: 2px solid var(--kin);
+    border-bottom-right-radius: 6px;
+  }
+  .paper + .paper { margin-top: 18px; }
 
-  .deco-star:nth-child(1) { top: -14px; right: 40px; animation-direction: reverse; }
-  .deco-star:nth-child(2) { bottom: -12px; left: 30px; font-size: 20px; animation-duration: 6s; }
-
-  /* ===== ANIMATIONS ===== */
-  @keyframes floatIn {
-    from { opacity: 0; transform: translateY(24px) scale(0.96); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
+  /* ════ 上部「ご訪問帳」 ════ */
+  .visit-bar {
+    margin: 22px 0 26px;
+    background: var(--ai-deep);
+    border: 1px solid var(--kin);
+    color: var(--zoge);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    font-size: 12.5px;
+    letter-spacing: 1.5px;
+    position: relative;
+  }
+  .visit-bar .crest {
+    width: 28px; height: 28px; flex-shrink: 0;
+    color: var(--kin-soft);
+  }
+  .visit-bar .kana {
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: 13px;
+    color: var(--kin-pale);
+    letter-spacing: 6px;
+  }
+  .visit-bar .kana small {
+    display: block;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: #a99a7a;
+    margin-top: 1px;
+  }
+  /* 時刻別ご挨拶（純JS、失敗時は初期文字列のまま表示） */
+  .visit-bar .greet {
+    margin-left: auto;
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: 13px;
+    color: var(--kin-soft);
+  }
+  .visit-bar .greet b {
+    color: var(--zoge);
+    font-weight: 600;
+    margin-right: 6px;
   }
 
-  @keyframes spin {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
+  /* ════ お辞儀するナビ ════ */
+  .butler-nav {
+    border-top: 1px solid #c8b895;
+    border-bottom: 1px solid #c8b895;
+    background: rgba(255,255,255,0.4);
+    margin: 0 0 40px;
+  }
+  .butler-nav ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0;
+  }
+  .butler-nav li {
+    transform-origin: 50% 100%;
+    transition: transform .35s ease;
+  }
+  .butler-nav li { --tilt: 0deg; }
+  .butler-nav li:hover { transform: rotate(var(--tilt)) translateY(2px); }
+  .butler-nav a {
+    display: block;
+    padding: 14px 22px 16px;
+    color: var(--ai-deep);
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 4px;
+    position: relative;
+    font-family: 'Shippori Mincho B1', serif;
+  }
+  .butler-nav a::after {
+    content: '';
+    position: absolute;
+    left: 12px; right: 12px; bottom: 8px;
+    height: 1px;
+    background: repeating-linear-gradient(90deg, var(--kin) 0 4px, transparent 4px 9px);
+    transform: scaleX(0.2);
+    transform-origin: 0 50%;
+    transition: transform .35s ease;
+  }
+  .butler-nav a:hover { color: var(--beni); }
+  .butler-nav a:hover::after { transform: scaleX(1); }
+  .butler-nav li + li a { border-left: 1px dotted #c8b895; }
+
+  /* ════ ヒーロー ════ */
+  .hero {
+    background: linear-gradient(170deg, var(--ai-deep) 0%, var(--ai) 60%, #2a3e58 100%);
+    color: var(--zoge);
+    border: 2px solid var(--kin);
+    border-radius: 4px 4px 6px 6px;
+    padding: 36px 36px 30px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 64px;
+    box-shadow: 0 20px 44px -22px rgba(20,32,54,0.55);
+    display: grid;
+    grid-template-columns: 1.45fr 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  /* 上端の市松帯 */
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 10px;
+    background-image: repeating-conic-gradient(var(--kin) 0% 25%, var(--ai-deep) 0% 50%);
+    background-size: 16px 10px;
+  }
+  /* 背景のうっすらした和柄（流水） */
+  .hero-bg {
+    position: absolute; inset: 10px 0 0 0; pointer-events: none;
+    background:
+      repeating-linear-gradient( 30deg, transparent 0 28px, rgba(181,141,77,0.07) 28px 30px),
+      repeating-linear-gradient(-30deg, transparent 0 28px, rgba(235,217,173,0.05) 28px 30px);
+    mask-image: radial-gradient(ellipse at 80% 30%, #000 0%, transparent 75%);
   }
 
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.04); }
+  /* 縦書きの肩書き */
+  .hero-tate {
+    writing-mode: vertical-rl;
+    -ms-writing-mode: tb-rl;
+    font-family: 'Kaisei Decol', serif;
+    color: var(--kin-soft);
+    font-size: 12px;
+    letter-spacing: 14px;
+    line-height: 1.6;
+    position: absolute;
+    top: 38px;
+    right: 14px;
+    opacity: 0.85;
   }
 
-  /* responsive */
-  @media (max-width: 500px) {
-    .char-name { font-size: 38px; }
-    .two-col { grid-template-columns: 1fr; }
-    .genre-grid { grid-template-columns: 1fr; }
+  .hero-body { position: relative; z-index: 2; padding-right: 28px; }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    border: 1px solid var(--kin-soft);
+    color: var(--kin-pale);
+    font-size: 11px;
+    letter-spacing: 4px;
+    padding: 6px 16px;
+    background: rgba(181,141,77,0.07);
+    margin-bottom: 20px;
+  }
+  .hero-badge .knot {
+    width: 12px; height: 12px;
+    background:
+      conic-gradient(var(--beni) 0% 25%, var(--zoge) 25% 50%, var(--kin) 50% 75%, var(--moegi) 75% 100%);
+  }
+
+  .hero-name {
+    font-family: 'Kaisei Decol', serif;
+    font-size: 64px;
+    color: var(--kin-pale);
+    line-height: 1.05;
+    letter-spacing: 6px;
+    text-shadow: 0 3px 0 rgba(0,0,0,0.25);
+    margin-bottom: 4px;
+  }
+  .hero-name .ruby {
+    font-family: 'Kaisei Decol', serif;
+    font-size: 13px;
+    color: var(--kin-soft);
+    letter-spacing: 4px;
+    display: block;
+    margin-bottom: 18px;
+  }
+  .hero-name small {
+    display: block;
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: 15px;
+    color: #cbd6e6;
+    letter-spacing: 8px;
+    margin-top: 12px;
+    font-weight: 500;
+  }
+
+  .hero-catch {
+    margin-top: 22px;
+    background: var(--zoge);
+    color: var(--sumi-text);
+    padding: 14px 20px;
+    border-left: 5px solid var(--beni);
+    font-size: 15px;
+    line-height: 1.7;
+    box-shadow: 0 10px 18px -12px rgba(0,0,0,0.4);
+    position: relative;
+  }
+  .hero-catch::before {
+    content: '口癖';
+    position: absolute;
+    top: -10px; left: 16px;
+    background: var(--beni);
+    color: var(--zoge);
+    font-size: 10px;
+    letter-spacing: 4px;
+    padding: 2px 10px;
+  }
+
+  .hero-quick {
+    margin-top: 28px;
+    border-top: 1px dashed rgba(235,217,173,0.4);
+    padding-top: 18px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 18px;
+    row-gap: 8px;
+    font-size: 12.5px;
+    color: var(--kin-pale);
+  }
+  .hero-quick dt {
+    font-family: 'Kaisei Decol', serif;
+    color: var(--kin-soft);
+    letter-spacing: 3px;
+    font-size: 11px;
+  }
+  .hero-quick dd {
+    color: var(--zoge);
+    font-family: 'Shippori Mincho B1', serif;
+    letter-spacing: 2px;
+  }
+
+  /* ヒーロー右側：窓枠（差し込み位置） */
+  .hero-window {
+    position: relative;
+    z-index: 2;
+    aspect-ratio: 4 / 5.2;
+    background:
+      linear-gradient(180deg, rgba(235,217,173,0.12), rgba(20,32,54,0.4)),
+      repeating-linear-gradient(0deg,  rgba(20,32,54,0.18) 0 1px, transparent 1px 28px),
+      repeating-linear-gradient(90deg, rgba(20,32,54,0.18) 0 1px, transparent 1px 28px),
+      #2a3e58;
+    border: 1.5px solid var(--kin-soft);
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    text-align: center;
+    color: #a79876;
+    padding: 22px;
+  }
+  .hero-window::before, .hero-window::after {
+    content: '';
+    position: absolute;
+    background:
+      linear-gradient(90deg, var(--kin-soft), transparent 30%, transparent 70%, var(--kin-soft));
+    height: 14px;
+    left: -2px; right: -2px;
+  }
+  .hero-window::before { top: -7px; }
+  .hero-window::after  { bottom: -7px; }
+
+  .crest-large {
+    width: 86px; height: 86px;
+    border: 2px solid var(--kin-soft);
+    border-radius: 4px;
+    background: var(--ai-deep);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--kin-soft);
+    font-family: 'Kaisei Decol', serif;
+    font-size: 36px;
+    letter-spacing: 0;
+    margin-bottom: 6px;
+    box-shadow: inset 0 0 0 4px var(--ai-deep), inset 0 0 0 5px var(--kin-soft);
+  }
+  .hero-window .placeholder-text {
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: 11px;
+    letter-spacing: 6px;
+    line-height: 2;
+    color: #8e7b56;
+  }
+  .hero-window .placeholder-text b {
+    color: var(--kin-pale);
+    font-size: 14px;
+    letter-spacing: 8px;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* ════ 呼び鈴（仕掛け） ════ */
+  /* JSを使わない純CSS仕掛け。チェックボックス hidden + label で開閉。 */
+  .bell-wrap {
+    margin: -36px 0 50px 44px;
+    position: relative;
+    z-index: 4;
+    width: 110px;
+  }
+  .bell-trigger { display: none; }
+  .bell-face {
+    display: block;
+    width: 110px;
+    background: linear-gradient(180deg, var(--kin), #8a6a34);
+    color: var(--zoge);
+    border: 1.5px solid var(--ai-deep);
+    padding: 10px 0;
+    text-align: center;
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: 12px;
+    letter-spacing: 6px;
+    box-shadow: 0 6px 14px -6px rgba(20,32,54,0.5);
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+  }
+  .bell-face::before {
+    content: '';
+    position: absolute;
+    top: -8px; left: 50%; transform: translateX(-50%);
+    width: 14px; height: 14px;
+    background: var(--beni);
+    border-radius: 50%;
+    border: 1px solid var(--ai-deep);
+  }
+  .bell-face::after {
+    content: '';
+    position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+    border-left: 3px solid transparent; border-right: 3px solid transparent;
+    border-bottom: 4px solid var(--zoge);
+    width: 0; height: 0;
+  }
+  .bell-trigger:checked + .bell-face {
+    background: linear-gradient(180deg, var(--beni), #7a1f21);
+  }
+  .bell-trigger:checked + .bell-face::before {
+    background: var(--kin-pale);
+    box-shadow: 0 0 0 3px rgba(235,217,173,0.25);
+  }
+  .callout {
+    position: absolute;
+    top: 56px; left: 130px;
+    width: 290px;
+    background: var(--washi);
+    border: 1.5px solid var(--kin);
+    border-radius: 2px 2px 6px 6px;
+    padding: 16px 20px;
+    color: var(--sumi-text);
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: 13.5px;
+    line-height: 1.85;
+    box-shadow: 0 18px 32px -20px rgba(40,30,20,0.5);
+    z-index: 5;
+    display: none;
+  }
+  .callout::before {
+    content: '';
+    position: absolute;
+    top: 18px; left: -10px;
+    width: 0; height: 0;
+    border-top: 8px solid transparent; border-bottom: 8px solid transparent;
+    border-right: 10px solid var(--kin);
+  }
+  .callout::after {
+    content: '';
+    position: absolute;
+    top: 19px; left: -7px;
+    width: 0; height: 0;
+    border-top: 7px solid transparent; border-bottom: 7px solid transparent;
+    border-right: 8px solid var(--washi);
+  }
+  .bell-trigger:checked ~ .callout { display: block; }
+  .callout .label {
+    display: inline-block;
+    background: var(--ai);
+    color: var(--zoge);
+    font-size: 10px;
+    letter-spacing: 4px;
+    padding: 3px 10px;
+    margin-bottom: 8px;
+  }
+
+  /* ════ お知らせ ════ */
+  .news { margin-bottom: 56px; }
+  .news-item {
+    display: grid;
+    grid-template-columns: 92px 78px 1fr;
+    column-gap: 14px;
+    align-items: baseline;
+    padding: 12px 4px;
+    border-bottom: 1px dashed #c8b895;
+    font-size: 13.5px;
+  }
+  .news-item:last-child { border-bottom: none; }
+  .news-item .date {
+    font-family: 'Shippori Mincho B1', serif;
+    color: var(--sub);
+    font-size: 12px;
+    letter-spacing: 2px;
+  }
+  .news-item .stamp {
+    font-family: 'Kaisei Decol', serif;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--zoge);
+    background: var(--beni);
+    padding: 3px 0;
+    text-align: center;
+    border: 1px solid #7a2224;
+  }
+  .news-item .stamp.ink   { background: var(--ai-deep); }
+  .news-item .stamp.sumi  { background: #5a463a; }
+  .news-item .stamp.draft { background: transparent; color: var(--sub); border: 1px dashed #c8b895; }
+
+  /* ════ 自己紹介 ════ */
+  .bio-layout {
+    display: grid;
+    grid-template-columns: 1.18fr 1fr;
+    column-gap: 26px;
+    row-gap: 18px;
+  }
+  .bio-main {
+    border-top: 3px double var(--kin);
+    padding-top: 18px;
+  }
+  .bio-text {
+    font-size: 14.5px;
+    color: var(--sumi-text);
+    line-height: 2.15;
+    text-align: justify;
+    letter-spacing: 0.02em;
+    word-spacing: 0.05em;
+  }
+  .bio-text .g {
+    background: linear-gradient(transparent 62%, rgba(181,54,56,0.22) 62%);
+    padding: 0 3px;
+    font-weight: 600;
+  }
+  .bio-text .kansai { color: var(--beni); font-weight: 600; }
+
+  .bio-table {
+    margin-top: 22px;
+    border-top: 1px solid #c8b895;
+  }
+  .bio-table .row {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    column-gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px dashed #c8b895;
+    font-size: 13px;
+  }
+  .bio-table .row .k {
+    color: var(--sub);
+    font-size: 11px;
+    letter-spacing: 3px;
+    font-family: 'Shippori Mincho B1', serif;
+    padding-top: 2px;
+  }
+  .bio-table .row .v { font-weight: 500; }
+
+  .bio-side .paper { padding: 22px 24px; }
+  .ld-list { list-style: none; font-size: 13.5px; color: var(--sumi-text); }
+  .ld-list li {
+    padding: 6px 0 6px 22px;
+    position: relative;
+    border-bottom: 1px dashed #d6c5a1;
+  }
+  .ld-list li:last-child { border-bottom: none; }
+  .ld-list li::before {
+    position: absolute; left: 0; top: 6px;
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: 13px;
+  }
+  .ld-good { border-top: 3px solid var(--moegi); padding-top: 14px; }
+  .ld-good .ld-list li::before { content: '◯'; color: var(--moegi); }
+  .ld-bad { border-top: 3px solid var(--beni); padding-top: 14px; }
+  .ld-bad .ld-list li::before { content: '✕'; color: var(--beni); }
+
+  /* 手帳風メモ */
+  .margin-note {
+    font-family: 'Kaisei Decol', serif;
+    font-size: 11px;
+    color: var(--sub);
+    margin-top: 14px;
+    padding-left: 8px;
+    border-left: 2px dotted #c8b895;
+    line-height: 1.9;
+  }
+  .margin-note::before { content: '※ '; color: var(--beni); }
+
+  /* ════ 活動（気ままなレイアウト） ════ */
+  .genre-stream {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr 1fr;
+    gap: 14px;
+  }
+  .genre-stream .col {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .genre-stream .col-2 { padding-top: 24px; }
+  .genre-stream .col-3 { padding-top: 12px; }
+  .g-chip {
+    background: var(--washi);
+    border: 1px solid #c8b895;
+    border-left: 4px solid var(--kin);
+    padding: 14px 16px;
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+  .g-chip .n {
+    font-family: 'Kaisei Decol', serif;
+    font-size: 10px;
+    color: var(--kin);
+    letter-spacing: 3px;
+    margin-right: 8px;
+  }
+  .g-chip .t { font-weight: 600; color: var(--ai-deep); }
+  .g-chip .d { font-size: 11.5px; color: var(--sub); display: block; margin-top: 4px; }
+
+  .write-note {
+    margin-top: 20px;
+    background:
+      repeating-linear-gradient(transparent 0 23px, rgba(120,90,55,0.18) 23px 24px);
+    padding: 18px 20px;
+    border: 1px dashed #b8a276;
+    font-family: 'Kaisei Decol', serif;
+    font-size: 12.5px;
+    color: var(--sumi-text);
+    line-height: 24px;
+    letter-spacing: 1px;
+  }
+  .write-note b { color: var(--beni); margin-right: 6px; }
+
+  /* スケジュール */
+  .sched-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 6px;
+    font-size: 12.5px;
+    font-family: 'Shippori Mincho B1', serif;
+  }
+  .sched-table th, .sched-table td {
+    border-bottom: 1px solid #c8b895;
+    padding: 10px 12px;
+    text-align: left;
+  }
+  .sched-table th {
+    color: var(--zoge);
+    background: var(--ai);
+    letter-spacing: 4px;
+    font-weight: 600;
+    border: none;
+    font-size: 12px;
+  }
+  .sched-table tr:last-child td { border-bottom: none; }
+  .sched-table td.center { text-align: center; color: var(--sub); }
+  .sched-table td .dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--moegi);
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  /* ════ みんなへ（書道風帯） ════ */
+  .letter {
+    background:
+      repeating-linear-gradient( transparent 0 27px, rgba(120,90,55,0.18) 27px 28px),
+      var(--washi);
+    padding: 32px 36px;
+    border: 1px solid #c8b895;
+    position: relative;
+  }
+  .letter::before {
+    content: '御';
+    position: absolute;
+    top: -8px; right: 26px;
+    background: var(--ai-deep);
+    color: var(--zoge);
+    font-family: 'Kaisei Decol', serif;
+    font-size: 30px;
+    width: 56px; height: 56px;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid var(--kin);
+    border-radius: 4px;
+    transform: rotate(-3deg);
+    box-shadow: 0 6px 14px -6px rgba(20,32,54,0.5);
+  }
+  .letter .opening {
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: 15px;
+    letter-spacing: 8px;
+    margin-bottom: 20px;
+  }
+  .letter-body {
+    font-family: 'Shippori Mincho B1', serif;
+    color: var(--sumi-text);
+    font-size: 15px;
+    line-height: 2.4;
+    text-align: justify;
+  }
+  .letter-body .em { color: var(--beni); font-weight: 700; }
+  .letter .closing {
+    margin-top: 20px;
+    text-align: right;
+    font-family: 'Kaisei Decol', serif;
+    font-size: 18px;
+    letter-spacing: 4px;
+  }
+  .letter .sign {
+    font-family: 'Kaisei Decol', serif;
+    font-size: 12px;
+    color: var(--sub);
+    text-align: right;
+    margin-top: 2px;
+    letter-spacing: 4px;
+  }
+
+  /* ════ ファン情報 / SNS ════ */
+  .fan-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 18px;
+    row-gap: 10px;
+    align-items: baseline;
+    font-size: 13.5px;
+  }
+  .fan-grid .k {
+    color: var(--sub);
+    font-size: 11px;
+    letter-spacing: 4px;
+    font-family: 'Shippori Mincho B1', serif;
+  }
+  .fan-grid .v { font-weight: 500; color: var(--sumi-text); }
+  .hashtag {
+    display: inline-block;
+    margin: 2px 6px 2px 0;
+    padding: 2px 10px;
+    font-size: 12px;
+    color: var(--ai-deep);
+    border: 1px solid #c8b895;
+    border-radius: 2px;
+    background: var(--washi-deep, var(--zoge-deep));
+    letter-spacing: 1px;
+  }
+  .mark-stamp {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Kaisei Decol', serif;
+    background: var(--beni);
+    color: var(--zoge);
+    width: 42px; height: 42px;
+    transform: rotate(-4deg);
+    border: 2px solid #7a2224;
+    box-shadow: 0 4px 10px -6px rgba(20,32,54,0.4);
+    margin-right: 4px;
+  }
+  .mark-stamp.small { width: 32px; height: 32px; font-size: 11px; transform: none; border-width: 1.5px; }
+
+  /* SNS — 整列しすぎない */
+  .sns-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .sns-row {
+    display: grid;
+    grid-template-columns: 50px 1fr auto;
+    align-items: center;
+    column-gap: 16px;
+    padding: 14px 16px;
+    background: var(--washi);
+    border: 1px solid #c8b895;
+    text-decoration: none;
+    color: inherit;
+    transition: background .2s, border-color .2s, transform .2s;
+  }
+  .sns-row:hover {
+    background: #fffaf0;
+    border-color: var(--kin);
+    transform: translateX(2px);
+  }
+  .sns-row .ic {
+    width: 42px; height: 42px;
+    border: 1px solid var(--kin);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--ai-deep);
+    color: var(--kin-pale);
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: 14px;
+  }
+  .sns-row .lbl {
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: 14.5px;
+    letter-spacing: 3px;
+  }
+  .sns-row .lbl small {
+    display: block;
+    font-size: 11px;
+    color: var(--sub);
+    letter-spacing: 1.5px;
+    margin-top: 2px;
+    font-family: 'Shippori Mincho B1', serif;
+  }
+  .sns-row .go {
+    color: var(--sub);
+    font-size: 11px;
+    letter-spacing: 2px;
+    font-family: 'Shippori Mincho B1', serif;
+  }
+  .sns-row:hover .go { color: var(--beni); }
+
+  /* ════ 注意事項 ════ */
+  .notice-list .grp {
+    margin-bottom: 22px;
+  }
+  .notice-list .grp:last-child { margin-bottom: 0; }
+  .notice-list .grp .ttl {
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: 13px;
+    letter-spacing: 5px;
+    color: var(--ai-deep);
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #c8b895;
+  }
+  .notice-list ul { list-style: none; }
+  .notice-list li {
+    position: relative;
+    padding: 5px 0 5px 28px;
+    font-size: 13px;
+    line-height: 1.85;
+    border-bottom: 1px dotted #d6c5a1;
+  }
+  .notice-list li:last-child { border-bottom: none; }
+  .notice-list li::before {
+    position: absolute;
+    left: 0; top: 6px;
+    font-family: 'Kaisei Decol', serif;
+    width: 18px; text-align: center;
+  }
+  .notice-list li.ok::before  { content: '可'; color: var(--moegi); }
+  .notice-list li.ng::before  { content: '禁'; color: var(--beni); }
+  .notice-list li.num::before { content: attr(data-n); color: var(--kin); }
+
+  /* ════ お問い合わせ（和の手紙フォーム） ════ */
+  .letter-form {
+    background: var(--washi);
+    border: 1px solid #c8b895;
+    padding: 26px 30px;
+  }
+  .letter-form .paper-title {
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: 14px;
+    letter-spacing: 6px;
+    margin-bottom: 16px;
+    color: var(--ai-deep);
+  }
+  .letter-form .col-line {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 18px;
+    border-bottom: 1px solid #c8b895;
+    padding-bottom: 14px;
+    margin-bottom: 14px;
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    align-items: baseline;
+    column-gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px dotted #d6c5a1;
+    font-size: 13px;
+  }
+  .form-row label {
+    color: var(--sub);
+    font-size: 11px;
+    letter-spacing: 3px;
+    font-family: 'Shippori Mincho B1', serif;
+    padding-top: 8px;
+  }
+  .form-row input,
+  .form-row textarea {
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: 13.5px;
+    color: var(--sumi-text);
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed transparent;
+    padding: 6px 4px;
+    resize: vertical;
+    line-height: 2;
+  }
+  .form-row input:focus,
+  .form-row textarea:focus {
+    outline: none;
+    border-bottom-color: var(--kin);
+  }
+  .form-row textarea { min-height: 120px; }
+  .seal-btn {
+    margin-top: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(180deg, var(--ai-deep), var(--ai));
+    color: var(--zoge);
+    border: 1px solid var(--kin);
+    padding: 12px 28px;
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: 13.5px;
+    letter-spacing: 6px;
+    cursor: pointer;
+    position: relative;
+  }
+  .seal-btn::after {
+    content: '認';
+    margin-left: 12px;
+    background: var(--beni);
+    color: var(--zoge);
+    font-family: 'Kaisei Decol', serif;
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 2px;
+    border: 1px solid #7a2224;
+    transform: rotate(-3deg);
+  }
+
+  /* ════ フッター ════ */
+  .foot {
+    margin-top: 64px;
+    padding-top: 28px;
+    border-top: 1px solid #c8b895;
+    text-align: center;
+  }
+  .foot .crest-big {
+    width: 64px; height: 64px;
+    margin: 0 auto 16px;
+    border: 2px solid var(--kin);
+    background: var(--ai-deep);
+    color: var(--kin-pale);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Kaisei Decol', serif;
+    font-size: 28px;
+    border-radius: 4px;
+    transform: rotate(-4deg);
+    box-shadow: 0 6px 14px -6px rgba(20,32,54,0.4);
+  }
+  .foot .sign-off {
+    font-family: 'Kaisei Decol', serif;
+    font-size: 20px;
+    color: var(--ai-deep);
+    letter-spacing: 6px;
+  }
+  .foot .sign-off small {
+    display: block;
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--sub);
+    margin-top: 6px;
+  }
+  .foot .addr {
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: 11.5px;
+    color: var(--sub);
+    margin-top: 16px;
+    letter-spacing: 2px;
+    line-height: 2;
+  }
+
+  /* ノート罫線（背景） */
+  .note-bg {
+    background-image: repeating-linear-gradient(
+      transparent 0 27px,
+      rgba(120,90,55,0.16) 27px 28px
+    );
+    padding: 18px 0 8px;
+  }
+
+  /* 呼び鈴風の揺れ（純CSS） */
+  @keyframes bellWiggle {
+    0%, 100% { transform: rotate(0deg); }
+    20%      { transform: rotate(-10deg); }
+    40%      { transform: rotate(8deg); }
+    60%      { transform: rotate(-4deg); }
+    80%      { transform: rotate(2deg); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .bell-trigger:checked ~ .callout { animation: fadeIn .4s ease both; }
+  .bell-trigger:checked + .bell-face .bell-shake {
+    animation: bellWiggle 1.4s ease;
+    transform-origin: 50% -2px;
+    display: inline-block;
+  }
+
+  /* レスポンシブ */
+  @media (max-width: 760px) {
+    .hero { grid-template-columns: 1fr; padding: 30px 24px 24px; }
+    .hero-name { font-size: 48px; }
+    .hero-window { max-width: 280px; margin: 0 auto; }
+    .bell-wrap { margin: -28px auto 36px; }
+    .callout { left: 0; top: 64px; width: calc(100% - 32px); }
+    .bio-layout { grid-template-columns: 1fr; }
+    .genre-stream { grid-template-columns: 1fr; }
+    .genre-stream .col-2, .genre-stream .col-3 { padding-top: 0; }
+    .letter-form .col-line { grid-template-columns: 1fr; }
+    .butler-nav ul { font-size: 12px; }
+    .butler-nav a { padding: 12px 12px 14px; font-size: 12px; letter-spacing: 2px; }
   }
 </style>
 </head>
 <body>
-<div class="page">
 
-  <!-- HEADER -->
-  <div class="header-card">
-    <div class="deco-star">⭐</div>
-    <div class="deco-star">✨</div>
-    <div class="badge-world">🌍 異世界から来た見習い執事 / Otherworld Exchange Butler</div>
-    <div class="char-name">碧樹<br><span style="font-size:40px;">シクロ</span></div>
-    <div class="char-name-sub">CICLO AOKI</div>
-    <div class="name-lore">
-      <span class="name-tag">異世界での名前</span>シクロ
-      <span class="name-arrow">→</span>
-      <span class="name-tag earth">地球でつけた名前</span>碧樹シクロ
+<div class="frame">
+
+  <!-- ════ ご訪問帳 ════ -->
+  <div class="visit-bar" role="region" aria-label="訪問時刻">
+    <span class="crest" aria-hidden="true">
+      <svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="3" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="14" y="20" text-anchor="middle" font-family="'Kaisei Decol', serif" font-size="14" fill="currentColor">碧</text>
+      </svg>
+    </span>
+    <span class="kana">あおき　しくろ<small>碧樹 シクロ</small></span>
+    <span class="greet" id="greet"><b>ごめんやす、</b>ようこそおいでくださいました。</span>
+  </div>
+
+  <!-- ════ お辞儀ナビ ════ -->
+  <nav class="butler-nav">
+    <ul>
+      <li><a href="#news">お知らせ</a></li>
+      <li><a href="#bio">自己紹介</a></li>
+      <li><a href="#stream">活動録</a></li>
+      <li><a href="#fan">お仲間</a></li>
+      <li><a href="#sns">ご来店</a></li>
+      <li><a href="#contact">お便り</a></li>
+    </ul>
+  </nav>
+
+  <!-- ════ ヒーロー ════ -->
+  <header class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-tate">見習い執事<br>修行中</div>
+
+    <div class="hero-body">
+      <div class="hero-badge"><span class="knot"></span>ただいま執事修行・修行不足を自覚の上</div>
+      <h1 class="hero-name">
+        碧樹シクロ
+        <span class="ruby">あおき しくろ ── Ciclo Aoki</span>
+        <small>異世界からの御付き人</small>
+      </h1>
+      <p class="hero-catch">道頓堀、始めて来ましたが海峡に架かっておりました ── 橋が二層になっておるとは。</p>
+
+      <dl class="hero-quick">
+        <dt>本所</dt><dd>茶毘羅北部・第四千年紀</dd>
+        <dt>赴任先</dt><dd>大阪府大阪市天王寺区細工谷（在歴二年と三ヶ月）</dd>
+        <dt>衣裳</dt><dd>スーツの下に、地球のTシャツ</dd>
+        <dt>口癖</dt><dd>関西弁（大阪式）</dd>
+        <dt>得手</dt><dd>IT、グルメ、ゲーム、雑談</dd>
+        <dt>苦手</dt><dd>ホラー、激辛、静寂、道迷い</dd>
+      </dl>
     </div>
-    <div class="catch-phrase">「この世界、知らないことだらけで楽しすぎる！」</div>
-  </div>
 
-  <!-- STATS CHIPS -->
-  <div class="stats-strip">
-    <div class="stat-chip" style="--i:1">🏠 出身：異世界</div>
-    <div class="stat-chip" style="--i:2">🗣️ 関西弁</div>
-    <div class="stat-chip" style="--i:3">🎩 見習い執事</div>
-    <div class="stat-chip" style="--i:4">🔮 魔法は使えない</div>
-    <div class="stat-chip" style="--i:5">💇 髪色は変えられる</div>
-  </div>
+    <!--
+      ≪差し込み位置①：キャラクター肖像画≫
+      推奨：縦長 4 : 5.2 の画像ファイル（PNG / JPG / WebP いずれも可）
+      hero-window の中身を <img src="character.png" alt="碧樹シクロ肖像画"> に差し替えていただければ装いが整います。
+      画師様未定のうちは crest-large ＋ placeholder-text が枠として機能します。 -->
+    <aside class="hero-window" id="character-art">
+      <div class="crest-large" aria-hidden="true">碧</div>
+      <div class="placeholder-text">
+        <b>肖像画</b>
+        画師様が決まり次第、<br>
+        ここにお掛けいたします。<br>
+        ── いましばらくお待ちを。
+      </div>
+    </aside>
+  </header>
 
-  <!-- LORE -->
-  <div class="lore-card">
-    <div class="section-label">📖 プロフィール</div>
-    <div class="lore-text">
-      ご主人様の<span class="highlight">異世界留学</span>に付き添って地球にやってきた青年。
-      異世界では<span class="highlight">「シクロ」</span>として生きてきたけど、
-      地球に来て<span class="highlight">「碧樹（あおき）」</span>という苗字がついた。
-      <span class="kansai">「なんか地球っぽくていいな」</span>って気に入ってるらしい。<br><br>
-      最初に降り立ったのが<span class="highlight">大阪</span>だったので、
-      周りの人の話し方を参考にしているうちに、気づいたら関西弁話者になってた。<br><br>
-      将来はちゃんとした<span class="highlight">執事</span>になる予定だけど、今はまだ見習い兼・友人ポジション。
-      故郷に向けて地球の文明を発信するのが今の仕事で、
-      特に<span class="highlight">IT・グルメ</span>にすごく興味がある。
-      魔法は使えないけど、知識欲と好奇心はどの魔法使いにも負けない！
+  <!-- ════ 呼び鈴 ════ -->
+  <!-- 純CSS仕掛け。JSなしでも動作。チェックを外せば閉じる。 -->
+  <div class="bell-wrap">
+    <input type="checkbox" id="bell" class="bell-trigger" aria-label="呼び鈴">
+    <label for="bell" class="bell-face">
+      <span class="bell-shake">ご用命</span>
+    </label>
+    <div class="callout" role="status">
+      <span class="label">ご主人様へ</span>
+      ピンポーン♪　しーく郎でございます。<br>
+      お茶菓子の用意もございますゆえ、<br>
+      ごゆるりとお寛ぎくださいませ。
     </div>
   </div>
 
-  <!-- GENRES -->
-  <div class="genre-card">
-    <div class="section-label">📺 動画・配信ジャンル</div>
-    <div style="font-size:11px; color:#aaa; margin-bottom:12px;">※配信は準備中。現在は動画メインで活動予定！</div>
-    <div class="genre-grid">
-      <div class="genre-item">
-        <div class="genre-icon">💻</div>
-        <div>
-          <div class="genre-name">IT・テック雑談</div>
-          <div class="genre-desc">碧樹目線で語るガジェット・アプリ沼</div>
+  <!-- ════ お知らせ ════ -->
+  <section class="news" id="news">
+    <div class="sec-head">
+      <span class="num">壱</span><h2>ご報告</h2>
+      <span class="rule"></span><span class="en">INFORMATION</span>
+    </div>
+    <div class="paper">
+      <div class="news-item">
+        <span class="date">二〇二六・九・十五</span>
+        <span class="stamp">新規</span>
+        <span>ホームページを置かせていただきました。字の汚さはご容赦。</span>
+      </div>
+      <div class="news-item">
+        <span class="date">（未定）</span>
+        <span class="stamp ink">予告</span>
+        <span>YouTubeにて、地球の面白いあれこれを調べては皆様にお届けする予定です。</span>
+      </div>
+      <div class="news-item">
+        <span class="date">（未定）</span>
+        <span class="stamp draft">下書き</span>
+        <span>配信の足音が聞こえ始めましたら、またここでお耳に入れいたします。</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ 自己紹介 ════ -->
+  <section id="bio">
+    <div class="sec-head">
+      <span class="num">弐</span><h2>自己紹介</h2>
+      <span class="rule"></span><span class="en">PROFILE</span>
+    </div>
+
+    <div class="bio-layout">
+      <!-- 主文 -->
+      <div class="bio-main">
+        <p class="bio-text">
+          ご主人様の<span class="g">異世界留学</span>に付き添って、地球まで渡ってまいりました青年です。
+          本国では<span class="g">「シクロ」</span>と呼ばれておりましたが、地球へ降り立った折に、宿の主人から<span class="g">「碧樹（あおき）」</span>という姓をいただきました。<span class="kansai">「なんか地球っぽくて、なんでしょうな、これ」</span>と、本人はいたく気にいっております。
+        </p>
+        <p class="bio-text" style="margin-top:14px;">
+          関空を発ちましたのは二年前の秋でございまして、リムジンバスで心斎橋へ出ました折、道頓堀の川沿いにたこ焼きを八個、秋葉原で電子音を浴び、京セラドームでは六時間迷子になりまして、気づけば<span class="kansai">関西弁</span>を話すようになっておりました。魔法は使えませぬ。何卒ご容赦を。
+        </p>
+        <p class="bio-text" style="margin-top:14px;">
+          いまは地球で<span class="g">IT</span>と<span class="g">グルメ</span>を日々せっせと勉強しておりますが、<span class="g">ちゃんとした執事</span>になるには、まだ道のりがございます。何か面白いことを教えてやってくださいまし ── 道頓堀の橋が二重になっていた、あれは何の橋でございましょう。
+        </p>
+
+        <dl class="bio-table">
+          <div class="row"><dt class="k">異世界での名</dt><dd class="v">シクロ</dd></div>
+          <div class="row"><dt class="k">地球での名</dt><dd class="v">碧樹 シクロ</dd></div>
+          <div class="row"><dt class="k">言語</dt><dd class="v">京都弁にあらず、大阪の関西弁</dd></div>
+          <div class="row"><dt class="k">魔法</dt><dd class="v">使えません（好奇心は独壇場）</dd></div>
+          <div class="row"><dt class="k">好きなもの</dt><dd class="v">関西のおばちゃん／新しめのガジェット／ボドゲ／雑談</dd></div>
+          <div class="row"><dt class="k">苦手なもの</dt><dd class="v">ホラー（怖い）・激辛（無理）・数学（泣く）・迷子（泣く）</dd></div>
+        </dl>
+
+        <div class="margin-note">
+          ※このページは本人が手作業で組み立てたものでございます。誤字脱字は「よしなに」と笑って流してやってください。
         </div>
       </div>
-      <div class="genre-item">
-        <div class="genre-icon">🍜</div>
-        <div>
-          <div class="genre-name">グルメ実況</div>
-          <div class="genre-desc">初見食材に全力でビビる！</div>
+
+      <!-- 好き / 苦手 -->
+      <div class="bio-side">
+        <div class="paper ld-good">
+          <ul class="ld-list">
+            <li>たこ焼き・お好み焼・串カツ（大阪の味噌）</li>
+            <li>まだ見ぬ土地のスナック菓子</li>
+            <li>カフェの窓際の席（昭和の喫茶店も可）</li>
+            <li>新作のイヤホン、壊れかけのキーボード</li>
+            <li>ゲーム音楽、作業用 BGM、ボカロ</li>
+            <li>知らない街の路地</li>
+            <li>みんなでワイワイ喋ること</li>
+          </ul>
         </div>
-      </div>
-      <div class="genre-item">
-        <div class="genre-icon">🎮</div>
-        <div>
-          <div class="genre-name">ゲーム実況</div>
-          <div class="genre-desc">地球のゲームを攻略したい！</div>
-        </div>
-      </div>
-      <div class="genre-item">
-        <div class="genre-icon">🎵</div>
-        <div>
-          <div class="genre-name">歌配信</div>
-          <div class="genre-desc">地球の名曲を歌います</div>
-        </div>
-      </div>
-      <div class="genre-item">
-        <div class="genre-icon">🌏</div>
-        <div>
-          <div class="genre-name">超雑談</div>
-          <div class="genre-desc">楽しくお話ししましょう！</div>
-        </div>
-      </div>
-      <div class="genre-item">
-        <div class="genre-icon">❓</div>
-        <div>
-          <div class="genre-name">なんでも質問コーナー</div>
-          <div class="genre-desc">執事見習いが何でも調べます</div>
+        <div class="paper ld-bad" style="margin-top:18px;">
+          <ul class="ld-list">
+            <li>ホラー映画（一人で観ると本気になります）</li>
+            <li>激辛カレー（翌日が怖い）</li>
+            <li>行列のできるラーメン屋（並びます）</li>
+            <li>正座での長話（足がしびれます）</li>
+            <li>集合場所に着いた瞬間の「誰だっけ」</li>
+            <li>無音の図書館</li>
+          </ul>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- LIKES / DISLIKES -->
-  <div class="two-col">
-    <div class="likes-card">
-      <div class="ld-label">💚 好きなもの</div>
-      <div class="ld-item">🍣 グルメ全般</div>
-      <div class="ld-item">📱 最新テクノロジー</div>
-      <div class="ld-item">🎮 ゲーム（ボドゲもビデオゲームも）</div>
-      <div class="ld-item">🎵 J-POP全般（ボカロも聴きます）</div>
-      <div class="ld-item">💬 おしゃべり・雑談</div>
+  <!-- ════ 活動 ════ -->
+  <section id="stream">
+    <div class="sec-head">
+      <span class="num">参</span><h2>活動録</h2>
+      <span class="rule"></span><span class="en">ACTIVITY</span>
     </div>
-    <div class="dislikes-card">
-      <div class="ld-label">❤️ 苦手なもの</div>
-      <div class="ld-item">👻 ホラー系全般</div>
-      <div class="ld-item">🌶️ 激辛料理</div>
-      <div class="ld-item">📐 複雑な数学</div>
-      <div class="ld-item">🤫 静かすぎる空間</div>
-      <div class="ld-item">🗺️ 道に迷うこと</div>
+
+    <!-- 動画・配信ジャンル：三列だが、上下に意図的な段差 -->
+    <div class="paper">
+      <div class="act-title">題材と振り分け</div>
+      <div class="genre-stream">
+        <div class="col col-1">
+          <div class="g-chip"><span class="n">壱</span><span class="t">IT・テック雑談</span><span class="d">珍妙なガジェットを前に「これが正しいのか？」と悶える30分。</span></div>
+          <div class="g-chip"><span class="n">弐</span><span class="t">グルメ実況</span><span class="d">初見の料理を食べながら、地の文化を推理する回。</span></div>
+        </div>
+        <div class="col col-2">
+          <div class="g-chip"><span class="n">参</span><span class="t">ゲーム実況</span><span class="d">地球のゲームを、異世界人の感性で攻略いたします。</span></div>
+          <div class="g-chip"><span class="n">肆</span><span class="t">歌枠（準備中）</span><span class="d">ボカロと昭和歌謡を、しずしずと。</span></div>
+        </div>
+        <div class="col col-3">
+          <div class="g-chip"><span class="n">伍</span><span class="t">おしゃべり雑談</span><span class="d">お茶菓子があれば、いつまでも。</span></div>
+          <div class="g-chip"><span class="n">陸</span><span class="t">何でも調べます</span><span class="d">執事見習い、誠実に承ります。</span></div>
+        </div>
+      </div>
+
+      <div class="write-note">
+        <b>※ 追記──</b>
+        いまは動画投稿で腕を磨いてます。配信はもう少しコツをつかんでから、始めるつもりです。
+      </div>
+
+      <!-- 配信スケジュール -->
+      <div class="act-title" style="margin-top:28px;">配信スケジュール</div>
+      <table class="sched-table">
+        <tr><th style="width:120px;">曜日</th><th>中身</th><th style="width:130px;">時間帯</th></tr>
+        <tr>
+          <td class="center">月・水・金</td>
+          <td>動画投稿（よる九時過ぎる頃）</td>
+          <td class="center"><span class="dot"></span>21:00 ごろ</td>
+        </tr>
+        <tr>
+          <td class="center">━</td>
+          <td>（配信日の設定はまだ白紙でございます）</td>
+          <td class="center">━</td>
+        </tr>
+      </table>
+      <div class="margin-note">配信日が決まりましたら、こちらに書き足しに参ります。</div>
+
+      <!-- 最新動画 -->
+      <div class="act-title" style="margin-top:28px;">最新の出し物</div>
+      <div class="sns-row" style="background:transparent;cursor:default;">
+        <span class="ic" style="background:var(--sub);">━</span>
+        <span class="lbl">一本目、ただいま編集中<small>公開まで今しばらくお待ちを</small></span>
+        <span class="go">COMING SOON</span>
+      </div>
+
+      <!-- グッズ・ファンクラブ -->
+      <div class="act-title" style="margin-top:28px;">物販・お仲間</div>
+      <div class="sns-row" style="background:transparent;cursor:default;">
+        <span class="ic">物</span>
+        <span class="lbl">オフィシャルグッズ<small>アクリルスタンド・缶バッジ・ステッカー、検討中でございます</small></span>
+        <span class="go" style="color:var(--beni);">準備中</span>
+      </div>
+      <div class="sns-row" style="background:transparent;cursor:default;">
+        <span class="ic">仲</span>
+        <span class="lbl">ファンクラブ（仮称）<small>アオキスタ様だけに、特別な何かをお届けしたいと思案中</small></span>
+        <span class="go" style="color:var(--beni);">準備中</span>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <!-- FAN MESSAGE -->
-  <div class="message-card">
-    <div class="section-label">💌 みんなへひとこと</div>
-    <div class="fan-message">
-      ここ見てくれてありがとう！<br>
-      地球に来たばかりで<span class="em">わからんことだらけ</span>なんやけど、<br>
-      みんなと一緒にいろいろ学んでいけたら嬉しいです！<br><br>
-      「これ食べてみて！」とか「これやってみて！」とか、<br>
-      なんでも気軽に話しかけてきて！<br>
-      <span class="em">全力で</span>答えます！<br><br>
-      ……執事になるまでの道のり、<span class="em">一緒に見守ってもらえると嬉しいです🎩✨</span>
+  <!-- ════ みんなへ ════ -->
+  <section>
+    <div class="sec-head">
+      <span class="num">肆</span><h2>ご主人様たちへ</h2>
+      <span class="rule"></span><span class="en">MESSAGE</span>
     </div>
-  </div>
-
-  <!-- FAN INFO -->
-  <div class="fan-info-card">
-    <div class="section-label">🌸 ファン情報</div>
-    <div class="fan-info-grid">
-      <div class="fan-info-key">ファンネーム</div>
-      <div class="fan-info-val">アオキスタ（Aokista）</div>
-      <div class="fan-info-key">ファンマーク</div>
-      <div class="fan-info-val">🫖🎩</div>
-      <div class="fan-info-key">総合タグ</div>
-      <div class="fan-info-val"><span class="tag">#碧樹シクロ</span></div>
-      <div class="fan-info-key">配信準備中</div>
-      <div class="fan-info-val"><span class="tag">#シクロ準備中</span></div>
-      <div class="fan-info-key">配信中</div>
-      <div class="fan-info-val"><span class="tag">#シクロ出動中</span></div>
-      <div class="fan-info-key">ファンアートタグ</div>
-      <div class="fan-info-val"><span class="tag">#アオキート</span></div>
-      <div class="fan-info-key">切り抜きタグ</div>
-      <div class="fan-info-val"><span class="tag">#碧樹シクロ切り抜き</span></div>
+    <div class="letter">
+      <div class="opening">拝啓　アオキスタの皆様</div>
+      <div class="letter-body">
+        いつも温かい目を向けてくださり、心より御礼申し上げます。<br>
+        地球に来てまだ日も浅く、<span class="em">わからんことだらけ</span>の毎日でお恥ずかしい限りですが、皆様とお話する時間は、どんな難題よりも明るく楽しいものでございます。<br><br>
+        つい先日のこと、京阪電車で三回迷子をいたしました。道頓堀ではたこ焼きの焼き加減で胃をやぶり、激辛カレーでは翌日の怖さを身をもって知りました ── 食あたりの顛末、方言の些細な言い回しも、誤って入った会議室の顛末も、どうかお気軽にお耳に入れてくださいませ。<span class="em">全力</span>でお答えいたします。<br><br>
+        いつかちゃんとした執事になれるよう、<span class="em">どうか見守って</span>いただければ幸いです。<br>
+        まずは一杯のコーヒーから、ゆるりと始めさせてください。
+      </div>
+      <div class="closing">敬具</div>
+      <div class="sign">── 碧樹シクロ 拝</div>
     </div>
-  </div>
+  </section>
 
-  <!-- SNS -->
-  <div class="sns-card">
-    <div class="section-label">📡 SNS・リンク一覧</div>
-    <div class="sns-grid">
-      <a class="sns-btn" href="https://www.youtube.com/@shikulo_aoki" target="_blank"><span class="sns-btn-icon">▶️</span> YouTube</a>
-      <a class="sns-btn" href="https://x.com/CicloAoki" target="_blank"><span class="sns-btn-icon">🐦</span> X (Twitter)</a>
-     <a class="sns-btn mail-btn" href="mailto:shikulo.aoki@gmail.com"><span class="sns-btn-icon">💌</span><div><div style="font-size:11px;color:#aaa;font-weight:400;">お仕事のご依頼</div><div style="font-size:12px;">shikulo.aoki@gmail.com</div></div></a>
+  <!-- ════ ファン情報 ════ -->
+  <section id="fan">
+    <div class="sec-head">
+      <span class="num">伍</span><h2>お仲間の符丁</h2>
+      <span class="rule"></span><span class="en">FAN</span>
     </div>
-  </div>
-
-  <!-- NOTICE -->
-  <div class="notice-card">
-    <div class="section-label">📋 リスナー注意事項</div>
-
-    <div class="notice-sub">▸ ファンアートについて</div>
-    <div class="notice-item"><span class="ok">OK</span> ファンアート大歓迎！タグをつけてくれると嬉しいです</div>
-    <div class="notice-item"><span class="ok">OK</span> 夢絵・同人誌</div>
-    <div class="notice-item"><span class="ng">NG</span> R18・グロ表現を含むもの</div>
-    <div class="notice-item"><span class="ng">NG</span> AIイラストをファンアートタグでの投稿</div>
-    <div class="notice-item"><span class="ng">NG</span> 偏った思想・発言を含むもの</div>
-
-    <div class="notice-sub">▸ 切り抜きについて</div>
-    <div class="notice-item"><span class="num">①</span> 切り抜き元のURL・YouTubeリンクを概要欄に記載してください</div>
-    <div class="notice-item"><span class="num">②</span> メンバー限定・非公開配信の切り抜き禁止</div>
-    <div class="notice-item"><span class="num">③</span> 悪意のある切り抜きはやめてください</div>
-    <div class="notice-item"><span class="num">④</span> 収益化を達成した場合はメールまでご連絡ください</div>
-    <div class="notice-item"><span class="num">⑤</span> XなどのSNSに投稿告知をする場合は切り抜き用ハッシュタグをご使用ください</div>
-
-    <div class="notice-sub">▸ その他</div>
-    <div class="notice-item"><span class="ng">NG</span> ルール違反者を見つけた場合、各サービス内での報告をお願いします</div>
-    <div class="notice-item"><span class="ng">NG</span> メールはお仕事用です。リスナーの方は、コメント欄やリプ欄に書き込んでください</div>
-  </div>
-
-  <!-- CREDITS -->
-  <div class="credits-card">
-    <div class="section-label">✨ Special Thanks</div>
-    <div class="credit-item">
-      <span class="credit-role">illustrator</span>
-      <span class="credit-name">（準備中）</span>
+    <div class="paper">
+      <div class="fan-grid">
+        <span class="k">お呼び名</span>
+        <span class="v">アオキスタ（Aokista）</span>
+        <span class="k">お印</span>
+        <span class="v"><span class="mark-stamp">印</span> ＋ お好きな印（自由にて）</span>
+        <span class="k">お名札タグ</span>
+        <span class="v"><span class="hashtag">#碧樹シクロ</span></span>
+        <span class="k">配信前タグ</span>
+        <span class="v"><span class="hashtag">#シクロ準備中</span></span>
+        <span class="k">配信中タグ</span>
+        <span class="v"><span class="hashtag">#シクロ出動中</span></span>
+        <span class="k">お絵描きタグ</span>
+        <span class="v"><span class="hashtag">#アオキート</span></span>
+        <span class="k">切り抜きタグ</span>
+        <span class="v"><span class="hashtag">#碧樹シクロ切り抜き</span></span>
+      </div>
+      <div class="margin-note">※ ハッシュタグは順次増やしてゆく所存。迷ったらとりあえず一番上のを付けてくだされ。</div>
     </div>
-    <div class="credit-item">
-      <span class="credit-role">Live2D modeling</span>
-      <span class="credit-name">（準備中）</span>
+  </section>
+
+  <!-- ════ SNS ════ -->
+  <section id="sns">
+    <div class="sec-head">
+      <span class="num">陸</span><h2>ご来店先</h2>
+      <span class="rule"></span><span class="en">LINKS</span>
     </div>
-    <div class="credit-item">
-      <span class="credit-role">logo / design</span>
-      <span class="credit-name">（準備中）</span>
+    <div class="sns-list">
+      <a class="sns-row" href="https://www.youtube.com/@shikulo_aoki" target="_blank" rel="noopener">
+        <span class="ic">映</span>
+        <span class="lbl">YouTube<small>動画の置き場所。ぶらりと覗いてやってください。</small></span>
+        <span class="go">動画を覗く ↗</span>
+      </a>
+      <a class="sns-row" href="https://x.com/CicloAoki" target="_blank" rel="noopener">
+        <span class="ic">短</span>
+        <span class="lbl">X（旧 Twitter）<small>日々の徒然、近況、時には愚痴も。</small></span>
+        <span class="go">読みにいく ↗</span>
+      </a>
+      <a class="sns-row" href="mailto:shikulo.aoki@gmail.com">
+        <span class="ic">商</span>
+        <span class="lbl">お仕事のご相談<small>shikulo.aoki@gmail.com ── 仕事のやり取り専用とさせて頂きます。</small></span>
+        <span class="go">手紙を書く ↗</span>
+      </a>
     </div>
+    <div class="margin-note">※ メールは世間話には使いませぬ。感想はSNSのコメント欄やリプ欄へ、どうぞお気軽に。</div>
+  </section>
+
+  <!-- ════ 注意事項 ════ -->
+  <section>
+    <div class="sec-head">
+      <span class="num">柒</span><h2>お付き合いの心得</h2>
+      <span class="rule"></span><span class="en">GUIDELINE</span>
+    </div>
+    <div class="paper notice-list">
+      <div class="grp">
+        <div class="ttl">お絵描きのほうへ</div>
+        <ul>
+          <li class="ok">歓迎いたします。タグをつけてくだされば、見に上がります。</li>
+          <li class="ok">夢絵・合同誌・キャラの解釈、ぜーんぶ大歓迎。</li>
+          <li class="ng">R-18、ならびに過激なグロ表現を含むもの。</li>
+          <li class="ng">AI 生成画像にファンアートタグをつけて投稿すること。</li>
+          <li class="ng">過度に偏った思想・主張を含むもの。</li>
+        </ul>
+      </div>
+      <div class="grp">
+        <div class="ttl">切り抜きのほうへ</div>
+        <ul>
+          <li class="num" data-n="一">切り抜き元の YouTube リンクを概要欄へご記載ください。</li>
+          <li class="num" data-n="二">非公開・メンバー限定の配信を素材にすることはご遠慮ください。</li>
+          <li class="num" data-n="三">悪意ある編集はご遠慮ください。</li>
+          <li class="num" data-n="四">収益化された暁には、ご一報を頂戴できれば幸い。</li>
+          <li class="num" data-n="五">SNSでご紹介の際は、切り抜き用タグをご使用くださいませ。</li>
+        </ul>
+      </div>
+      <div class="grp">
+        <div class="ttl">その他のほうへ</div>
+        <ul>
+          <li class="ng">ルール違反を見つけた際は、各サービスの通報機能をご利用ください。</li>
+          <li class="ng">メールは仕事の窓口ゆえ、皆様のお気持ちはコメント欄・リプ欄へ。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ お問い合わせ ════ -->
+  <section id="contact">
+    <div class="sec-head">
+      <span class="num">捌</span><h2>お便り</h2>
+      <span class="rule"></span><span class="en">CONTACT</span>
+    </div>
+    <form class="letter-form" onsubmit="return postMail(event)">
+      <div class="paper-title">仕事の御依頼・御相談はこちらへ</div>
+      <div class="col-line">
+        <div class="form-row">
+          <label for="c-name">お名前</label>
+          <input id="c-name" type="text" placeholder="例）〇〇株式会社 山田">
+        </div>
+        <div class="form-row">
+          <label for="c-mail">メール</label>
+          <input id="c-mail" type="email" required placeholder="example@mail.com">
+        </div>
+      </div>
+      <div class="form-row">
+        <label for="c-subj">件名</label>
+        <input id="c-subj" type="text" required placeholder="例）コラボのご相談">
+      </div>
+      <div class="form-row">
+        <label for="c-body">本文</label>
+        <textarea id="c-body" required placeholder="ご用件をお書きください"></textarea>
+      </div>
+      <button class="seal-btn" type="submit">内容を整えてお手紙にする</button>
+    </form>
+    <div class="margin-note">
+      ※ このフォームは、その場でメーラーが立ち上がる方式でございます。送信ボタンを押すと、件名・本文・送信者情報が整った状態でメールが開きます。
+    </div>
+  </section>
+
+  <!-- ════ Special Thanks ════ -->
+  <section>
+    <div class="sec-head">
+      <span class="num">玖</span><h2>御礼</h2>
+      <span class="rule"></span><span class="en">CREDIT</span>
+    </div>
+    <div class="paper">
+      <div class="fan-grid">
+        <span class="k">illustrator</span><span class="v">— （画師様、只今お探し中でございます）</span>
+        <span class="k">Live2D model</span><span class="v">— 画師様決定後に着手予定</span>
+        <span class="k">logo / design</span><span class="v">— 本ページ自体が当方の試案、順次差し替え予定</span>
+      </div>
+      <div class="margin-note">
+        ※ 縁あってご担当頂ける方才らっしゃいましたら、メールの方からお声がけ頂戴できますと、大変嬉しゅうございます。
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ フッター ════ -->
+  <footer class="foot">
+    <div class="crest-big" aria-hidden="true">
+      <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="44" height="44">
+        <rect x="6" y="6" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="24" y="34" text-anchor="middle" font-family="'Kaisei Decol', serif" font-size="22" fill="currentColor">碧</text>
+      </svg>
+    </div>
+    <div class="sign-off">碧樹シクロ　謹んで<small>CICLO AOKI — butler in training</small></div>
+    <div class="addr">
+      大阪府大阪市天王寺区細工谷 ── 事前予約制<br>
+      お仕事は shikulo.aoki[at]gmail.com まで<br>
+      ──── ご訪問、まことに有り難う存じます<br><br>
+      <small style="color:var(--sub);font-size:11px;">※ このページは本人が手作業で組み立てております。掲載物への AI 自動生成物の混入はございません。</small>
+    </div>
+  </footer>
+</div>
+
+<script>
+  /* ── 時刻帯のご挨拶（素のJS、依存なし。失敗時は初期HTMLのまま表示） ── */
+  (function () {
+    try {
+      var el = document.getElementById('greet');
+      if (!el) return;
+      var h = new Date().getHours();
+      var slot;
+      if (h >= 5  && h < 11) slot = 'おはようございます';
+      else if (h >= 11 && h < 17) slot = 'ごきげんよう';
+      else if (h >= 17 && h < 21) slot = 'よい夕餉を';
+      else slot = '夜も更けて参りました';
+      el.innerHTML = '<b>' + slot + '、</b>ようこそおいでくださいました。';
+    } catch (e) { /* 失敗時は初期文字列のまま */ }
+  })();
+
+  /* ── ナビのお辞儀：各 li に固有の固定微小回転を書き込む ── */
+  (function () {
+    try {
+      var lis = document.querySelectorAll('.butler-nav li');
+      for (var i = 0; i < lis.length; i++) {
+        var t = (Math.sin(i * 1.7 + 0.9) * 0.9).toFixed(2); /* −1.4° 〜 +0.9° の範囲で固定 */
+        lis[i].style.setProperty('--tilt', t + 'deg');
+      }
+    } catch (e) { /* 静かに何もしない */ }
+  })();
+
+  /* ── お問い合わせフォーム → メーラー起動 ── */
+  function postMail(ev) {
+    ev.preventDefault();
+    var name = document.getElementById('c-name').value.trim() || '（名無し）';
+    var mail = document.getElementById('c-mail').value.trim();
+    var subj = document.getElementById('c-subj').value.trim();
+    var body = document.getElementById('c-body').value.trim();
+    if (!mail || !subj || !body) return false;
+    var line = '--------------------------------\n';
+    var text = line + 'お名前: ' + name + '\n' + 'メール: ' + mail + '\n' + line + '\n' + body;
+    window.location.href =
+      'mailto:shikulo.aoki@gmail.com' +
+      '?subject=' + encodeURIComponent('[お便り] ' + subj) +
+      '&body=' + encodeURIComponent(text);
+    return false;
+  }
+</script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495" integrity="sha512-iIg7k2xntmwu6/uSb5tpc/hySgZc4eoL31yB29W6tJFo2akwjPWcEqnCEdJvGexCL0KEQwVYv5BlowfhVz26hg==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","spa":2}' crossorigin="anonymous"></script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495" integrity="sha512-iIg7k2xntmwu6/uSb5tpc/hySgZc4eoL31yB29W6tJFo2akwjPWcEqnCEdJvGexCL0KEQwVYv5BlowfhVz26hg==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","spa":2}' crossorigin="anonymous"></script>
+</body>
+</html>
